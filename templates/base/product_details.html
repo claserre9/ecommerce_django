@@ -10,23 +10,19 @@
         <br>
         <div class="row">
             <div class="col s12 m6">
-                <img class="responsive-img materialboxed" width="650" src="{% static 'img/sample-1.jpg' %}" alt="">
+                <img class="responsive-img materialboxed" width="650" src="{{ product.image.url }}" alt="">
             </div>
             <div class="col s12 m6">
-                <h5>Product Name</h5>
-                <h6 class="grey-text">Category</h6>
+                <h5>{{ product.name }}</h5>
+                <h6 class="grey-text">{{ product.category }}</h6>
                 <br>
-                <h6 class="text-accent-1"><strong> $12.99 </strong></h6>
-                <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci consequatur
-                    culpa doloribus, dolorum esse fugiat omnis velit vitae. Amet et fugiat harum illo nemo quia
-                    reiciendis sequi tempora veniam voluptate!
-                </p>
+                <h6 class="text-accent-1"><strong> $ {{ product.price }} </strong></h6>
+                <p class="text-justify">{{ product.description }}</p>
                 <br>
                 <br>
                 <a class="waves-effect waves-light btn"><i class="material-icons left">attach_money</i>Buy now</a>
                 <a class="waves-effect waves-light btn"><i class="material-icons left">shopping_cart</i>Add to cart</a>
             </div>
         </div>
-
     </div>
 {% endblock %}

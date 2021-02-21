@@ -19,22 +19,35 @@
 <main>
     <nav>
         <div class="nav-wrapper">
-            <a href="#!" class="brand-logo">Logo</a>
+            <a href="#" class="brand-logo">Logo</a>
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="sass.html">Sass</a></li>
-                <li><a href="badges.html">Components</a></li>
-                <li><a href="collapsible.html">Javascript</a></li>
-                <li><a href="mobile.html">Mobile</a></li>
+                <li><a href="#">Sass</a></li>
+                <li><a href="#">Components</a></li>
+                <li><a href="#">Javascript</a></li>
+                <li><a href="#">Mobile</a></li>
+                <li>
+                    <a class="dropdown-trigger" href="#" data-target="dropdown1">Category
+                        <i class="material-icons right">arrow_drop_down</i>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
 
+    <ul id="dropdown1" class="dropdown-content">
+        {% for category in links %}
+            <li><a href="{{ category.get_url }}">{{ category.name }}</a></li>
+        {% endfor %}
+        <li class="divider"></li>
+        <li><a href="{% url "app_base_home" %}">All</a></li>
+    </ul>
+
     <ul class="sidenav" id="mobile-demo">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">Javascript</a></li>
-        <li><a href="mobile.html">Mobile</a></li>
+        <li><a href="#">Sass</a></li>
+        <li><a href="#">Components</a></li>
+        <li><a href="#">Javascript</a></li>
+        <li><a href="#">Mobile</a></li>
     </ul>
     {% block content %}
 
