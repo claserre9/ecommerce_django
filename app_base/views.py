@@ -3,6 +3,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
@@ -17,7 +18,12 @@ def home(request, category_slug=None):
         products = Product.objects.filter(available=True, category=category_page)
     else:
         products = Product.objects.all().filter(available=True)
-    return render(request, 'base/home.html', {"category": category_page, "products": products})
+
+    paginator = Paginator(products, 4)
+    page_number = request.GET.get('page') or "1"
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'base/home.html',
+                  {"category": category_page, "products": products, "page_obj": page_obj, 'page_number': page_number})
 
 
 def product_details(request, category_slug, product_slug):
@@ -50,35 +56,17 @@ class LoginUserView(SuccessMessageMixin, LoginView):
     success_message = "Yeah! You are logged in"
 
 
-# def userlogin(request):
-#     if request == "POST":
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return redirect('app_base_home')
-#         else:
-#             return redirect("app_base_signup")
-#
-#         # form = AuthenticationForm(data=request.POST)
-#         # print(request.POST)
-#         # if form.is_valid():
-#         #     username = request.POST['username']
-#         #     password = request.POST['password']
-#         #     print(username, password)
-#         #     user = authenticate(request, username=username, password=password)
-#         #     if user is not None:
-#         #         login(request, user)
-#         #         return redirect('app_base_home')
-#         #     else:
-#         #         return redirect("app_base_signup")
-#     else:
-#         form = AuthenticationForm()
-#     return render(request, 'base/login.html', dict(form=form))
-
-
 def userlogout(request):
     logout(request)
     messages.success(request, 'Good bye !')
     return redirect('app_base_home')
+
+
+def search(request):
+    products = Product.objects.filter(name__icontains=request.GET['course'])
+    count_result = products.count()
+
+    paginator = Paginator(products, 4)
+    page_number = request.GET.get('page') or "1"
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'base/home.html', dict(products=products, count_result=count_result, page_obj=page_obj, page_number=page_number))

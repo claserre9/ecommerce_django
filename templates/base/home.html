@@ -11,7 +11,7 @@
         {% include "_partials/_slider.html" %}
         <br>
         <div class="row">
-            {% for product in products %}
+            {% for product in page_obj %}
                 <div class="col s12 m6 l3">
                     <div class="card">
                         <div class="card-image">
@@ -27,8 +27,48 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
+        <br>
+        <br>
+        {% if page_obj.paginator.num_pages > 1 %}
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="waves-effect">
+                        <a href="?page=1">
+                            <i class="material-icons">chevron_left</i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        <a href="#">
+                            <i class="material-icons">chevron_left</i>
+                        </a>
+                    </li>
+                {% endif %}
 
+                {% for page_num in page_obj.paginator.page_range %}
+
+                    <li class="{% if page_num == page_number|add:0 %}active{% else %}waves-effect{% endif %} ">
+                        <a href="?page={{ page_num }}">{{ page_num }} </a>
+                    </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="waves-effect">
+                        <a href="?page={{ page_obj.paginator.num_pages }}">
+                            <i class="material-icons">chevron_right</i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        <a href="#">
+                            <i class="material-icons">chevron_right</i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+    </div>
 {% endblock %}
 
 {#Flash messages#}

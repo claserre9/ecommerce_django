@@ -18,11 +18,14 @@
 </head>
 <body>
 <main>
-    <nav>
+    <nav class="nav-extended">
         <div class="nav-wrapper">
             <a href="#" class="brand-logo">TutoProject</a>
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
+                <!-- Modal Trigger -->
+                <li><a class=" modal-trigger" href="#modal1"><i class="material-icons left">search</i>Search</a>
+                </li>
                 <li>
                     <a class="dropdown-trigger" href="#" data-target="dropdown1">Course Category
                         <i class="material-icons right">arrow_drop_down</i>
@@ -42,6 +45,21 @@
             </ul>
         </div>
     </nav>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Search</h4>
+            <form action="{% url 'app_base_search' %}" method="get">
+                <div class="input-field">
+                    <input id="search" type="search" name="course" required>
+                    <label class="label-icon" for="search"></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <ul id="dropdown1" class="dropdown-content">
         {% for category in links %}
