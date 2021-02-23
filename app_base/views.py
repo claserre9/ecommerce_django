@@ -69,4 +69,9 @@ def search(request):
     paginator = Paginator(products, 4)
     page_number = request.GET.get('page') or "1"
     page_obj = paginator.get_page(page_number)
-    return render(request, 'base/home.html', dict(products=products, count_result=count_result, page_obj=page_obj, page_number=page_number))
+    return render(request, 'base/home.html',
+                  dict(products=products, count_result=count_result, page_obj=page_obj, page_number=page_number))
+
+
+def cart(request):
+    return render(request, 'base/cart.html')
