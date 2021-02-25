@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app_base.apps.AppBaseConfig',
+    'stripe'
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'app_base.context_processors.menu_links',
+                'app_base.context_processors.cart_infos',
             ],
         },
     },
@@ -131,6 +133,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
 LOGIN_REDIRECT_URL = 'app_base_home'
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51HipXHK6qedgwkuuC5TcEzpg5exJz3FACbWH2SBdbQmpLtOAanU3FEzWbbFlGGV28tLioG16fUuYUUjeMFa8cgBT00j3CgigTn'
+STRIPE_SECRET_KEY = 'sk_test_51HipXHK6qedgwkuudTU6M3dFDj7UlAinebUH2I4CKUGdx7yL1lt57gmfMkObnO8mmg4jlT5qkYKLXSAeozYKbyrD00igpVsA2Q'
 
 
 

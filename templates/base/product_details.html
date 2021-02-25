@@ -21,7 +21,9 @@
                 <br>
                 <br>
                 <a class="waves-effect waves-light btn"><i class="material-icons left">attach_money</i>Buy now</a>
-                <a class="waves-effect waves-light btn"><i class="material-icons left">shopping_cart</i>Add to cart</a>
+                <a class="waves-effect waves-light btn" href="{% url 'app_base_add_cart' product.id %}">
+                    <i class="material-icons left">shopping_cart</i>Add to cart
+                </a>
             </div>
         </div>
     </div>
