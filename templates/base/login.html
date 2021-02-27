@@ -17,18 +17,10 @@
             </button>
         </form>
         <br>
+        <br>
+        <p>No registered yet !</p>
+        <a href="/signup/{% if path %}?next={{ path }}{% endif %} " class="btn waves-effect waves-light" type="button" >Sign up
+            <i class="material-icons right">account_circle</i>
+        </a>
     </div>
-{% endblock %}
-
-{% block javascript %}
-    {{ block.super }}
-    {% if messages %}
-        {% for message in messages %}
-            <script>
-                $(document).ready(function () {
-                    M.toast({html: "{{ message }}"})
-                })
-            </script>
-        {% endfor %}
-    {% endif %}
 {% endblock %}

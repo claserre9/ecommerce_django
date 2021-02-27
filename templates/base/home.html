@@ -74,14 +74,5 @@
 {#Flash messages#}
 {% block javascript %}
     {{ block.super }}
-    {% if messages %}
-        {% for message in messages %}
-            <script>
-                $(document).ready(function () {
-                    M.toast({html: "{{ message }}"})
-                })
-            </script>
-        {% endfor %}
-    {% endif %}
 {% endblock %}
 {#Flash messages#}

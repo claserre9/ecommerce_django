@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/mcss.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+    <link rel="shortcut icon" type="image/png" href="../favicon.ico"/>
 
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -37,14 +38,14 @@
                         <i class="material-icons right">arrow_drop_down</i>
                     </a>
                 </li>
-                {% if count_product_quantity_session != 0 %}
-                    <li>
-                        <a href="{% url 'app_base_cart' %}">Cart
-                            <span class="new badge" data-badge-caption="">{{ count_product_quantity_session }}
+
+                <li>
+                    <a href="{% url 'app_base_cart' %}">Cart
+                        <span class="new badge" data-badge-caption="">{{ count_product_quantity_session }}
                         </span>
-                        </a>
-                    </li>
-                {% endif %}
+                    </a>
+                </li>
+
 
                 {% if request.user.is_authenticated %}
                     <li>
@@ -127,6 +128,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="{% static 'js/mjs.js' %}"></script>
+
+    {% if messages %}
+        {% for message in messages %}
+            <script>
+                $(document).ready(function () {
+                    M.toast({html: "{{ message }}"})
+                })
+            </script>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
 
 </body>

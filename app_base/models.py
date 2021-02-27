@@ -1,5 +1,7 @@
+import uuid
 from datetime import datetime
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -88,3 +90,39 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.product}"
+
+
+class Order(models.Model):
+    token = models.UUIDField(default=uuid.uuid4, editable=False)
+    total = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='USD Order total')
+    email_address = models.EmailField(max_length=255, blank=True, verbose_name='Email address')
+    created = models.DateTimeField(auto_now_add=True)
+    shipping_name = models.CharField(max_length=255, blank=True)
+    shipping_address = models.CharField(max_length=255, blank=True)
+    shipping_city = models.CharField(max_length=255, blank=True)
+    shipping_country = models.CharField(max_length=255, blank=True)
+    shipping_postal_code = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "Order"
+        ordering = ["-created"]
+
+    def __str__(self):
+        return str(self.id)
+
+
+class OrderItem(models.Model):
+    product = models.CharField(max_length=255)
+    quantity = models.IntegerField()
+    price = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='USD Price')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "OrderItem"
+
+    def sub_total(self):
+        return self.price * self.quantity
+
+    def __str__(self):
+        return self.product

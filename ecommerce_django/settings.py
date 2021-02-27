@@ -132,10 +132,14 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
-LOGIN_REDIRECT_URL = 'app_base_home'
+
+LOGIN_URL = "app_base_login"
+LOGIN_REDIRECT_URL = "app_base_home"
 
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51HipXHK6qedgwkuuC5TcEzpg5exJz3FACbWH2SBdbQmpLtOAanU3FEzWbbFlGGV28tLioG16fUuYUUjeMFa8cgBT00j3CgigTn'
 STRIPE_SECRET_KEY = 'sk_test_51HipXHK6qedgwkuudTU6M3dFDj7UlAinebUH2I4CKUGdx7yL1lt57gmfMkObnO8mmg4jlT5qkYKLXSAeozYKbyrD00igpVsA2Q'
+STRIPE_ENDPOINT_SECRET =''
+SESSION_ENGINE = 'app_base.session_backend'
 
 
 
