@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import django_heroku
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,7 +25,6 @@ SECRET_KEY = '0di2r@1o@sn#3r)zw_t-8@k^#%6dqpo$4hn_%wmdw13d@k31v_'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -74,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce_django.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -84,7 +81,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -104,7 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -117,7 +112,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -132,14 +126,13 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
-
 LOGIN_URL = "app_base_login"
 LOGIN_REDIRECT_URL = "app_base_home"
 
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51HipXHK6qedgwkuuC5TcEzpg5exJz3FACbWH2SBdbQmpLtOAanU3FEzWbbFlGGV28tLioG16fUuYUUjeMFa8cgBT00j3CgigTn'
 STRIPE_SECRET_KEY = 'sk_test_51HipXHK6qedgwkuudTU6M3dFDj7UlAinebUH2I4CKUGdx7yL1lt57gmfMkObnO8mmg4jlT5qkYKLXSAeozYKbyrD00igpVsA2Q'
-STRIPE_ENDPOINT_SECRET =''
+STRIPE_ENDPOINT_SECRET = ''
 SESSION_ENGINE = 'app_base.session_backend'
 
-
-
+# Activate Django-Heroku.
+django_heroku.settings(locals())
