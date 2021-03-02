@@ -63,6 +63,14 @@ class Product(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.stock == 0:
+            self.available = False
+        if self.stock > 0:
+            self.available = True
+        super(Product, self).save()
+
 
 class Cart(models.Model):
     cart_id = models.CharField(max_length=255, blank=True)
@@ -94,6 +102,8 @@ class CartItem(models.Model):
 
 class Order(models.Model):
     token = models.UUIDField(default=uuid.uuid4, editable=False)
+    verbose_id = models.CharField(max_length=255)
+    stripe_id = models.CharField(max_length=255, editable=False)
     total = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='USD Order total')
     email_address = models.EmailField(max_length=255, blank=True, verbose_name='Email address')
     created = models.DateTimeField(auto_now_add=True)
@@ -109,7 +119,12 @@ class Order(models.Model):
         ordering = ["-created"]
 
     def __str__(self):
-        return str(self.id)
+        return f'({str(self.token).split("-")[0]}) {self.user}'
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.verbose_id = str(self.token).split("-")[0]
+        super(Order, self).save()
 
 
 class OrderItem(models.Model):

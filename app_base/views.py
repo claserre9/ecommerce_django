@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
@@ -17,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from .forms import SignUpForm
-from .models import Category, Product, Cart, CartItem
+from .models import Category, Product, Cart, CartItem, Order, OrderItem
 
 
 def home(request, category_slug=None):
@@ -143,17 +144,14 @@ def delete_item(request, cart_item_id):
     return redirect('app_base_cart')
 
 
-# @login_required
-# def stripe_config(request):
-#     if request.method == 'GET':
-#         stripe_configuration = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
-#         return JsonResponse(stripe_configuration, safe=False)
-
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'POST':
         try:
-            domain_url = 'http://127.0.0.1:8000/'
+            # domain_url = 'http://127.0.0.1:8000/'
+            domain_url = f'{request.scheme}://{get_current_site(request)}/'
+            print(domain_url)
+
             # print(request.get_full_path().index('/', 1))
             # print(request.build_absolute_uri())
             stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -190,21 +188,69 @@ class CancelledView(TemplateView):
 
 
 def payment_success(request):
-    # Delete all session's data
-    request.session.flush()
-
     checkout_session_id = ""
     stripe.api_key = settings.STRIPE_SECRET_KEY
+    current_user = request.user
+
     if request.method == 'GET':
         checkout_session_id = request.GET.get('session_id')
 
         # To get costumer infos
-        checkout_session_infos = stripe.checkout.Session.retrieve(checkout_session_id)
-        print(checkout_session_infos)
-        # To get all products bought after payment
-        line_items = stripe.checkout.Session.list_line_items(checkout_session_id)
+        checkout_session_infos = json.loads(str(stripe.checkout.Session.retrieve(checkout_session_id)))
+        total = float(checkout_session_infos['amount_total']) / 100
+        email = checkout_session_infos['customer_details']['email']
+        shipping_name = checkout_session_infos['shipping']['name']
+        address_line_1 = checkout_session_infos['shipping']['address']['line1']
+        address_line_2 = checkout_session_infos['shipping']['address']['line2']
+        shipping_address = f'{address_line_1} {address_line_2}'
 
-        all_product = json.loads(str(line_items))
+        shipping_city = checkout_session_infos['shipping']['address']['city']
+        shipping_country = checkout_session_infos['shipping']['address']['country']
+        shipping_postal_code = checkout_session_infos['shipping']['address']['postal_code']
 
-        print(all_product)
+        try:
+            order = Order.objects.get(stripe_id=checkout_session_id)
+            print(order)
+            pass
+        except Order.DoesNotExist:
+            order = Order.objects.create(total=total, email_address=email, shipping_name=shipping_name,
+                                         shipping_address=shipping_address, shipping_city=shipping_city,
+                                         shipping_country=shipping_country,
+                                         shipping_postal_code=shipping_postal_code,
+                                         user=current_user, stripe_id=checkout_session_id)
+
+            try:
+                cart_el = Cart.objects.get(cart_id=_cart_id(request))
+                cart_items = CartItem.objects.filter(cart=cart_el)
+
+                for cart_item in cart_items:
+                    order_item = OrderItem.objects.create(product=cart_item.product.name, quantity=cart_item.quantity,
+                                                          price=cart_item.product.price, order=order)
+                    order_item.save()
+                    product = Product.objects.get(id=cart_item.product.id)
+                    product.stock = int(cart_item.product.stock - cart_item.quantity)
+                    product.save()
+
+                cart_el.delete()
+            except ObjectDoesNotExist:
+                pass
+
     return render(request, 'base/success.html', {'session_id': checkout_session_id})
+
+
+@login_required()
+def order_history(request, orders=None):
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user)
+    return render(request, 'base/order_history.html', {'orders': orders})
+
+
+@login_required()
+def order_details(request, order_id, order_item=None):
+    try:
+        order = Order.objects.get(id=order_id)
+        order_item = OrderItem.objects.filter(order=order)
+    except ObjectDoesNotExist:
+        pass
+
+    return render(request, 'base/order_details.html', {'order_item': order_item, 'order': order})

@@ -12,7 +12,7 @@
             {% csrf_token %}
             {% for field in form %}
                 <div class="fieldWrapper">
-                    {{ field.errors }}
+                    {#{{ field.errors }}#}
                     {{ field.label_tag }}
                     {{ field }}
                 </div>
@@ -24,4 +24,19 @@
         <br>
     </div>
 
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <script>
+                    $(document).ready(function () {
+                        M.toast({html: "{{ field.label }}: {{ error|escape }}"})
+                    })
+                </script>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

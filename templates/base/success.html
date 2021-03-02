@@ -1,19 +1,28 @@
-<!-- templates/success.html -->
+{% extends 'master_page.html' %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Django + Stripe Checkout</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-  </head>
-  <body>
-  <section class="section">
+{% block title %}
+    Payment successful
+{% endblock %}
+
+{% block content %}
     <div class="container">
-      <p>Your payment succeeded.</p>
+        <br>
+        <br>
+        <br>
+        <div class="card-panel center z-depth-5">
+            <i class="material-icons green-text large">check_circle</i> <h3 class="center">Payment successful</h3>
+            <h5 class="center">Thank you!</h5>
+        </div>
+        <br>
+        <br>
+        <a class="waves-effect waves-light btn-large" href="{% url "app_base_home" %}">
+            <i class="material-icons left">home</i>
+            Back to home
+        </a>
+        <a class="waves-effect waves-light btn-large" href="{% url 'app_base_order_history' %}">
+            <i class="material-icons left">format_list_numbered</i>
+            Order details
+        </a>
     </div>
-  </section>
-  </body>
-</html>
+{% endblock %}
+

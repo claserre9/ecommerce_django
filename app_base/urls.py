@@ -13,9 +13,10 @@ urlpatterns = [
     path('cart/add/<int:product_id>', views.add_cart, name="app_base_add_cart"),
     path('cart/remove/<int:product_id>', views.remove_cart, name="app_base_remove_cart"),
     path('cart/delete/<int:cart_item_id>', views.delete_item, name='app_base_delete_item'),
-    # path('config/', views.stripe_config),
     path('create-checkout-session', views.create_checkout_session, name='app_base_create_checkout_session'),
     path('success/', views.payment_success, name="app_base_success_payment"),
     path('cancelled/', views.CancelledView.as_view()),
+    path('order-history/', views.order_history, name="app_base_order_history"),
+    path('order-details/<int:order_id>', views.order_details, name="app_base_order_details"),
     path('logout/', views.userlogout, name="app_base_logout"),
 ]

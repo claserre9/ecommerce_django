@@ -55,6 +55,12 @@
                                 <td>{{ cart_item.product.name }}</td>
 
                                 <td>
+
+                                    <a class="btn-floating btn-small waves-effect waves-light blue"
+                                       href="{% url 'app_base_remove_cart' cart_item.product.id %}">
+                                        <i class="material-icons">remove</i>
+                                    </a>
+                                    &nbsp;&nbsp;{{ cart_item.quantity }}&nbsp;
                                     <a class="btn-floating btn-small waves-effect waves-light green
                                     {% if cart_item.quantity == cart_item.product.stock %}
                                     disabled
@@ -63,12 +69,7 @@
                                         <i class="material-icons">add</i>
                                     </a>
 
-                                    &nbsp; {{ cart_item.quantity }} &nbsp;
 
-                                    <a class="btn-floating btn-small waves-effect waves-light blue"
-                                       href="{% url 'app_base_remove_cart' cart_item.product.id %}">
-                                        <i class="material-icons">remove</i>
-                                    </a>
                                 </td>
                                 <td>{{ cart_item.product.price }}</td>
                                 <td>{{ cart_item.sub_total }}</td>

@@ -1,19 +1,28 @@
-<!-- templates/cancelled.html -->
+{% extends 'master_page.html' %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Django + Stripe Checkout</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-  </head>
-  <body>
-  <section class="section">
+{% block title %}
+    Payment failed
+{% endblock %}
+
+{% block content %}
     <div class="container">
-      <p>Your payment was cancelled.</p>
+        <br>
+        <br>
+        <br>
+        <div class="card-panel center z-depth-5">
+            <i class="material-icons red-text large">not_interested</i> <h3 class="center">Payment failed</h3>
+            <h5 class="center">We are sorry !</h5>
+        </div>
+        <br>--
+        ][-0
+        <br>
+        <a class="waves-effect waves-light btn-large" href="{% url "app_base_home" %}">
+            <i class="material-icons left">home</i>
+            Back to home
+        </a>
+        <a class="waves-effect waves-light btn-large" href="{% url 'app_base_cart' %}">
+            <i class="material-icons left">format_list_numbered</i>
+            Try again
+        </a>
     </div>
-  </section>
-  </body>
-</html>
+{% endblock %}

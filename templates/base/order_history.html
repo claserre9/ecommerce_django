@@ -1,0 +1,38 @@
+{% extends 'master_page.html' %}
+{% block title %}
+    My Orders
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <br>
+        <br>
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% if orders.count == 0 %}
+                <br>
+                <br>
+                <p>You have not place orders</p>
+            {% else %}
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.verbose_id }}</td>
+                        <td>{{ order.created }}</td>
+                        <td>$ {{ order.total }}</td>
+                        <td><a href="{% url 'app_base_order_details' order.id %}">View order</a></td>
+                    </tr>
+
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
