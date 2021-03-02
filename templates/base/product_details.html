@@ -1,0 +1,30 @@
+{% extends 'master_page.html' %}
+{% load static %}
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <br>
+        <br>
+        <div class="row">
+            <div class="col s12 m6">
+                <img class="responsive-img materialboxed" width="650" src="{{ product.image.url }}" alt="">
+            </div>
+            <div class="col s12 m6">
+                <h5>{{ product.name }}</h5>
+                <h6 class="grey-text">{{ product.category }}</h6>
+                <br>
+                <h6 class="text-accent-1"><strong> $ {{ product.price }} </strong></h6>
+                <p class="text-justify">{{ product.description }}</p>
+                <br>
+                <br>
+                <a class="waves-effect waves-light btn"><i class="material-icons left">attach_money</i>Buy now</a>
+                <a class="waves-effect waves-light btn" href="{% url 'app_base_add_cart' product.id %}">
+                    <i class="material-icons left">shopping_cart</i>Add to cart
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'master_page.html' %}
+
+{% block title %}
+    Payment successful
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <br>
+        <br>
+        <br>
+        <div class="card-panel center z-depth-5">
+            <i class="material-icons green-text large">check_circle</i> <h3 class="center">Payment successful</h3>
+            <h5 class="center">Thank you!</h5>
+        </div>
+        <br>
+        <br>
+        <a class="waves-effect waves-light btn-large" href="{% url "app_base_home" %}">
+            <i class="material-icons left">home</i>
+            Back to home
+        </a>
+        <a class="waves-effect waves-light btn-large" href="{% url 'app_base_order_history' %}">
+            <i class="material-icons left">format_list_numbered</i>
+            Order details
+        </a>
+    </div>
+{% endblock %}
+

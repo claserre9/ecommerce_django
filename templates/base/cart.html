@@ -1,0 +1,142 @@
+{% extends 'master_page.html' %}
+
+{% block title %}
+    Cart
+{% endblock %}
+
+{% block content %}
+
+    <br>
+    <br>
+    {% if not cart_items %}
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12">
+                    <div class="card-panel">
+                        <h5>Your shopping cart is empty right now! </h5>
+                    </div>
+                </div>
+                <div class="col">
+                    <a class="waves-effect waves-light btn-large" href="{% url 'app_base_home' %}"><i
+                            class="material-icons right">arrow_back</i>Back
+                        to home</a>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12">
+                    <h4 class="center">Your items</h4>
+                    <hr>
+                    <table class="highlight center">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Item Name</th>
+                            <th>Item Quantity</th>
+                            <th>Item Price</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for cart_item in cart_items %}
+                            <tr>
+                                <td>
+                                    <a href="{{ cart_item.product.get_url }}">
+                                        <img src="{{ cart_item.product.image.url }}" alt="{{ cart_item.product.name }}"
+                                             width="100" height="100">
+                                    </a>
+                                </td>
+
+                                <td>{{ cart_item.product.name }}</td>
+
+                                <td>
+
+                                    <a class="btn-floating btn-small waves-effect waves-light blue"
+                                       href="{% url 'app_base_remove_cart' cart_item.product.id %}">
+                                        <i class="material-icons">remove</i>
+                                    </a>
+                                    &nbsp;&nbsp;{{ cart_item.quantity }}&nbsp;
+                                    <a class="btn-floating btn-small waves-effect waves-light green
+                                    {% if cart_item.quantity == cart_item.product.stock %}
+                                    disabled
+                                    {% endif %} "
+                                       href="{% url 'app_base_add_cart' cart_item.product.id %}">
+                                        <i class="material-icons">add</i>
+                                    </a>
+
+
+                                </td>
+                                <td>{{ cart_item.product.price }}</td>
+                                <td>{{ cart_item.sub_total }}</td>
+                                <td>
+                                    <a class="btn-floating btn-small waves-effect waves-light red"
+                                       href="{% url 'app_base_delete_item' cart_item.id %}">
+                                        <i class="material-icons">delete</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col s12 m12">
+                    <h4 class="center">Checkout</h4>
+                    <hr>
+                    <h6 class="center">Please review your cart items before proceeding with the payment</h6>
+                    <br>
+                    <div class="card-panel center"><h6>Your total is <strong>{{ total }}</strong></h6></div>
+                    <br>
+                    <div class="center-align">
+                        <a class="waves-effect waves-light btn-large">
+                            <i class="large material-icons left">shopping_cart</i>
+                            Continue shopping
+                        </a>
+                        <a class="waves-effect waves-light btn-large" id="checkout-button">
+                            <i class="large material-icons left">payment</i>
+                            Checkout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script type="text/javascript">
+        // Create an instance of the Stripe object with your publishable API key
+        const stripe = Stripe("pk_test_51HipXHK6qedgwkuuC5TcEzpg5exJz3FACbWH2SBdbQmpLtOAanU3FEzWbbFlGGV28tLioG16fUuYUUjeMFa8cgBT00j3CgigTn");
+        const checkoutButton = document.getElementById("checkout-button");
+        checkoutButton.addEventListener("click", function () {
+            fetch("{% url "app_base_create_checkout_session" %}", {
+                method: "POST",
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (session) {
+                    return stripe.redirectToCheckout({sessionId: session.id});
+                })
+                .then(function (result) {
+                    // If redirectToCheckout fails due to a browser or network
+                    // error, you should display the localized error message to your
+                    // customer using error.message.
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Error:", error);
+                });
+        });
+
+    </script>
+{% endblock %}
